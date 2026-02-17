@@ -99,7 +99,7 @@ const cartSubtotalText = document.getElementById("cartSubtotalText");
 const cartList = document.getElementById("cartList");
 
 
-// ✅ LocalStorage key
+
 const CART_KEY = "swiftcart_cart";
 
 function saveCart() {
@@ -117,7 +117,7 @@ function loadCart() {
 function renderCartList() {
     if (!cartList) return;
 
-    // empty cart UI
+
     if (cart.length === 0) {
         cartList.innerHTML = `<p class="text-sm text-gray-500">Cart is empty.</p>`;
         return;
@@ -145,10 +145,10 @@ function removeFromCartById(id) {
 
     cart.splice(index, 1);
 
-    // optional: if you're using localStorage
+
     if (typeof saveCart === "function") saveCart();
 
-    updateCartUI(); // ✅ instantly update count + subtotal + list
+    updateCartUI();
 }
 
 cartList.addEventListener("click", (e) => {
@@ -164,11 +164,11 @@ cartList.addEventListener("click", (e) => {
 
 
 function updateCartUI() {
-    // Count update
+
     cartCount.innerText = cart.length;
     cartItemsText.innerText = `${cart.length} Items`;
 
-    // Subtotal calculate
+
     const subtotal = cart.reduce((sum, item) => sum + item.price, 0);
     cartSubtotalText.innerText = `Subtotal: $${subtotal.toFixed(2)}`;
     renderCartList();
@@ -178,9 +178,9 @@ window.addToCart = function(id) {
     const product = allProducts.find(p => p.id === id);
     if (!product) return;
 
-    cart.push(product); // ✅ add product to array
-    saveCart(); // ✅ persist (optional but included)
-    updateCartUI(); // ✅ update navbar count & subtotal
+    cart.push(product);
+    saveCart();
+    updateCartUI();
 };
 
 
@@ -285,14 +285,14 @@ function setActiveCategory(activeCat) {
 window.filterByCategory = function(category) {
 
     if (category === "all") {
-        // Show all products
+      
         const cards = allProducts.map(createProductCard).join("");
         productsGrid.innerHTML = cards;
         countText.innerText = `${allProducts.length} items found`;
         return;
     }
 
-    // Filter products by category
+    
     const filtered = allProducts.filter(p => p.category === category);
 
     const cards = filtered.map(createProductCard).join("");
@@ -396,7 +396,7 @@ function scrollToSection(id) {
 
 
 
-// Click handler (Desktop + Mobile)
+
 function handleNavClick(e) {
   const btn = e.target.closest("button[data-nav]");
   if (!btn) return;
@@ -416,7 +416,7 @@ function handleNavClick(e) {
     return;
   }
   if (label === "Products") {
-    // ✅ Products click করলে All products show
+    
     if (typeof filterByCategory === "function") filterByCategory("all");
     scrollToSection("products");
     return;
@@ -434,16 +434,16 @@ if (mobileNavLinks) mobileNavLinks.addEventListener("click", handleNavClick);
 
 // Initial render
 renderNavbar();
-// ==================================================
+
 
 window.addEventListener("scroll", () => {
-  // 👇 যদি user already Contact এ থাকে, force overwrite করো না
+  
   const contact = document.getElementById("contact");
   if (!contact) return;
 
   const scrollPosition = window.scrollY + window.innerHeight;
 
-  // যদি footer visible হয় → Contact active
+  
   if (scrollPosition >= contact.offsetTop) {
     setActiveNav("Contact");
     return;

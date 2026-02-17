@@ -2,32 +2,26 @@
 <html lang="en" data-theme="light">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>SwiftCart</title>
-    <!-- link -->
+
+    <!-- Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+
+    <!-- DaisyUI + Tailwind CDN -->
     <link href="https://cdn.jsdelivr.net/npm/daisyui@5" rel="stylesheet" type="text/css" />
     <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            plugins: [daisyui]
-        }
-    </script>
 
-
-
-
-
-    <link rel="stylesheet" href="./style.css">
-    <link rel="stylesheet" href="./output.css">
-
-
+    <!-- ✅ No raw css needed (keep empty if you want) -->
+    <link rel="stylesheet" href="./style.css" />
 </head>
 
-<body class="bg-white w-full overflow-x-hidden">
-    <header class="sticky top-0 z-50">
-        <div class="navbar bg-white px-3 lg:px-8">
+<body class="bg-white w-full overflow-x-hidden text-gray-900">
+
+    <!-- HEADER -->
+    <header class="sticky top-0 z-50 border-b border-gray-100 bg-white/90 backdrop-blur">
+        <div class="navbar bg-transparent px-3 lg:px-8 max-w-6xl mx-auto">
 
             <!-- LEFT: Mobile Menu + Logo -->
             <div class="navbar-start">
@@ -37,9 +31,9 @@
                     <div tabindex="0" role="button" class="btn btn-ghost lg:hidden">
                         <!-- menu icon -->
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round"
-              stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-          </svg>
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M4 6h16M4 12h16M4 18h16" />
+            </svg>
                     </div>
 
                     <!-- Mobile Menu Dropdown -->
@@ -53,8 +47,8 @@
 
                 <!-- Logo -->
                 <a class="text-lg sm:text-xl font-bold text-blue-600 ml-1">
-        SwiftCart
-      </a>
+          SwiftCart
+        </a>
             </div>
 
             <!-- CENTER: Desktop Menu (HIDDEN ON MOBILE) -->
@@ -67,31 +61,34 @@
                 </ul>
             </div>
 
-            <!-- RIGHT: Cart Icon (ALWAYS RIGHT + RESPONSIVE) -->
+            <!-- RIGHT: Cart Icon -->
             <div class="navbar-end">
                 <div class="dropdown dropdown-end">
                     <div tabindex="0" role="button" class="btn btn-ghost btn-circle">
                         <div class="indicator">
                             <!-- Cart Icon -->
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 sm:h-6 sm:w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5" /></svg>
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5" />
+              </svg>
 
                             <!-- Badge -->
-                            <span class="badge badge-sm badge-primary indicator-item">3</span>
+                            <span id="cartCount" class="badge badge-sm badge-primary indicator-item">0</span>
+
                         </div>
                     </div>
 
-                    <!-- Cart Dropdown (Mobile Friendly Width) -->
+                    <!-- Cart Dropdown -->
                     <div tabindex="0" class="dropdown-content card card-compact w-64 sm:w-72 bg-base-100 shadow-xl mt-3">
                         <div class="card-body">
-                            <span class="text-lg font-bold">3 Items</span>
-                            <span class="text-info text-sm">Subtotal: $120</span>
+                            <span id="cartItemsText" class="text-lg font-bold">0 Items</span>
+                            <span id="cartSubtotalText" class="text-info text-sm">Subtotal: $0</span>
+
 
                             <div class="card-actions mt-2">
-                                <button class="btn btn-primary btn-block bg-blue-700 text-white font-semibold">View Cart</button>
+                                <button class="btn btn-primary btn-block bg-blue-700 text-white font-semibold border-0">
+                  View Cart
+                </button>
                             </div>
                         </div>
                     </div>
@@ -100,14 +97,12 @@
 
         </div>
     </header>
-    <!-- HERO (must be OUTSIDE any .container / max-w wrapper) -->
 
+    <!-- HERO -->
     <section class="w-full">
         <div class="hero min-h-[calc(100vh-64px)] lg:min-h-[calc(100vh-72px)] w-full" style="background-image: url('./resource/banner-image.png');">
-            <!-- Left dark -> right transparent -->
-            <div class="hero-overlay bg-gradient-to-r from-black/50 via-black/20 to-transparent"></div>
+            <div class="hero-overlay bg-gradient-to-r from-black/40 via-black/25 to-transparent"></div>
 
-            <!-- Mobile: center | Desktop: left -->
             <div class="hero-content w-full justify-center lg:justify-start px-4 sm:px-10 lg:px-16 text-neutral-content">
                 <div class="max-w-xl text-center lg:text-left">
                     <h1 class="mb-4 text-3xl sm:text-4xl lg:text-6xl font-bold leading-tight">
@@ -118,55 +113,74 @@
                         Discover the latest trends in fashion, electronics, and more. Shop with confidence and style at SwiftCart.
                     </p>
 
-                    <button class="btn btn-primary">Shop Now</button>
+                    <button class="btn btn-primary font-bold  bg-blue-700 hover:bg-blue-700 border-0 rounded-xl px-6 py-3 text-base sm:px-8 sm:py-4 sm:text-lg shadow-md">Shop Now</button>
                 </div>
             </div>
         </div>
     </section>
+
+    <!-- WHY CHOOSE US -->
     <section class="py-16">
         <div class="max-w-6xl mx-auto px-4">
             <div class="text-center items-center mt-5 mb-8 space-y-4">
                 <h2 class="font-bold text-2xl sm:text-3xl lg:text-4xl">Why Choose Us</h2>
-                <p class="text-gray-400 text-sm sm:text-base">We provide the best shopping experience with top-notch services. </p>
+                <p class="text-gray-400 text-sm sm:text-base">
+                    We provide the best shopping experience with top-notch services.
+                </p>
             </div>
+
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
-                <div class="card card-border bg-gray-50">
+                <div class="card card-border bg-gray-50 hover:shadow-sm transition">
                     <div class="card-body">
                         <i class="fa-solid fa-truck text-2xl text-blue-700"></i>
                         <h2 class="card-title font-bold text-lg">Free Dalivery</h2>
-                        <p class="text-gray-400 text-sm">A card component has a figure, a body part, and inside body there are title and actions parts</p>
+                        <p class="text-gray-400 text-sm">
+                            A card component has a figure, a body part, and inside body there are title and actions parts
+                        </p>
                     </div>
                 </div>
-                <div class="card card-border bg-gray-50">
+
+                <div class="card card-border bg-gray-50 hover:shadow-sm transition">
                     <div class="card-body">
                         <i class="fa-solid fa-headset text-2xl text-blue-700"></i>
                         <h2 class="card-title text-lg font-bold">24/7 Support</h2>
-                        <p class="text-gray-400 text-sm">A card component has a figure, a body part, and inside body there are title and actions parts</p>
+                        <p class="text-gray-400 text-sm">
+                            A card component has a figure, a body part, and inside body there are title and actions parts
+                        </p>
                     </div>
                 </div>
-                <div class="card card-border bg-gray-50">
+
+                <div class="card card-border bg-gray-50 hover:shadow-sm transition">
                     <div class="card-body">
                         <i class="fa-solid fa-bangladeshi-taka-sign text-2xl text-blue-700"></i>
                         <h2 class="card-title font-bold text-lg">Secure Payment</h2>
-                        <p class="text-gray-400 text-sm">A card component has a figure, a body part, and inside body there are title and actions parts</p>
+                        <p class="text-gray-400 text-sm">
+                            A card component has a figure, a body part, and inside body there are title and actions parts
+                        </p>
                     </div>
                 </div>
-                <div class="card card-border bg-gray-50">
+
+                <div class="card card-border bg-gray-50 hover:shadow-sm transition">
                     <div class="card-body">
                         <i class="fa-solid fa-arrow-rotate-left text-2xl text-blue-700"></i>
                         <h2 class="card-title font-bold text-lg">Easy Returns</h2>
-                        <p class="text-gray-400 text-sm">A card component has a figure, a body part, and inside body there are title and actions parts</p>
+                        <p class="text-gray-400 text-sm">
+                            A card component has a figure, a body part, and inside body there are title and actions parts
+                        </p>
                     </div>
                 </div>
             </div>
         </div>
-
     </section>
+
+    <!-- MAIN CONTENT -->
     <main class="max-w-6xl mx-auto px-4 py-8">
 
         <!-- Trending -->
         <section class="mb-10">
-            <h2 class="text-2xl font-semibold mb-5">Trending Now</h2>
+            <div class="flex items-center justify-between mb-5">
+                <h2 class="text-2xl font-semibold">Trending Now</h2>
+            </div>
             <div id="trendingGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
         </section>
 
@@ -174,9 +188,8 @@
         <section class="mb-6">
             <h2 class="text-xl font-semibold mb-3">Categories</h2>
 
-            <div class="flex flex-wrap gap-3" id="categoryButtons">
-                <!-- dynamic buttons -->
-            </div>
+            <!-- ✅ nice wrap + scroll for small screen -->
+            <div class="flex flex-wrap gap-3" id="categoryButtons"></div>
         </section>
 
         <!-- Products -->
@@ -186,7 +199,10 @@
                 <p class="text-sm text-gray-500" id="countText"></p>
             </div>
 
-            <div id="productsGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+            <div id="productsGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+
+
+            </div>
         </section>
 
     </main>
@@ -196,27 +212,25 @@
         <div class="bg-white max-w-2xl w-full rounded-2xl shadow-lg overflow-hidden">
             <div class="flex items-center justify-between px-5 py-4 border-b">
                 <h3 class="font-semibold text-lg">Product Details</h3>
-                <button id="modalClose" class="text-gray-500 hover:text-gray-800 text-2xl leading-none">&times;</button>
+                <button id="modalClose" class="btn btn-ghost btn-sm text-xl">&times;</button>
             </div>
 
-            <div id="modalBody" class="p-5">
-                <!-- dynamic -->
-            </div>
+            <div id="modalBody" class="p-5"></div>
         </div>
     </div>
 
-
+    <!-- FOOTER -->
     <footer class="bg-gray-800 text-gray-300 py-8 sm:py-12 px-4 sm:px-6 lg:px-8">
         <div class="max-w-6xl mx-auto">
-            <!-- Footer Grid -->
+
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8 mb-8">
-                <!-- Brand Section -->
                 <div>
                     <h6 class="text-xl sm:text-2xl text-blue-600 font-bold mb-3">SwiftCart</h6>
-                    <p class="text-xs sm:text-sm text-slate-400 leading-6">Your one-stop shop for all fashion and lifestyle needs. Quality products, fast delivery and excellent support.</p>
+                    <p class="text-xs sm:text-sm text-slate-400 leading-6 max-w-xs">
+                        Your one-stop shop for all fashion and lifestyle needs. Quality products, fast delivery and excellent support.
+                    </p>
                 </div>
 
-                <!-- Quick Links -->
                 <div>
                     <h6 class="text-base sm:text-lg font-bold text-white mb-3">Quick Links</h6>
                     <ul class="space-y-2 text-sm">
@@ -227,7 +241,6 @@
                     </ul>
                 </div>
 
-                <!-- Support -->
                 <div>
                     <h6 class="text-base sm:text-lg font-bold text-white mb-3">Support</h6>
                     <ul class="space-y-2 text-sm">
@@ -238,23 +251,23 @@
                     </ul>
                 </div>
 
-                <!-- Newsletter -->
                 <div>
-                    <h6 class="text-base sm:text-lg font-bold text-white mb-3"> Subcribe to our Newsletter</h6>
+                    <h6 class="text-base sm:text-lg font-bold text-white mb-3">Subscribe to our Newsletter</h6>
                     <p class="text-xs sm:text-sm text-slate-400 mb-3">Get the latest news and offers straight to your inbox.</p>
                     <div class="flex flex-col gap-2">
                         <input type="email" placeholder="your@email.com" class="input input-bordered input-sm sm:input-md w-full text-black" />
-                        <button class="btn btn-primary btn-sm sm:btn-md w-full bg-blue-600 hover:bg-blue-700 text-white border-0">Subscribe</button>
+                        <button class="btn btn-primary btn-sm sm:btn-md w-full bg-blue-600 hover:bg-blue-700 text-white border-0">
+              Subscribe
+            </button>
                     </div>
                 </div>
             </div>
 
-            <!-- Divider -->
             <div class="border-t border-gray-700 my-6"></div>
 
-            <!-- Bottom Footer -->
             <div class="flex flex-col sm:flex-row justify-between items-center text-xs sm:text-sm text-slate-400 gap-4">
                 <p>&copy; 2026 SwiftCart. All rights reserved.</p>
+
                 <div class="flex gap-4 justify-center sm:justify-end">
                     <a href="#" class="hover:text-blue-500 transition">Terms</a>
                     <a href="#" class="hover:text-blue-500 transition">Privacy</a>
@@ -268,13 +281,6 @@
         console.log('Loaded page:', location.href);
     </script>
     <script src="./app.js"></script>
-
-
-
-
-
-
-
 
 </body>
 

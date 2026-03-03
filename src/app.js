@@ -172,32 +172,32 @@ function updateCartUI() {
     const subtotal = cart.reduce((sum, item) => sum + item.price, 0);
     cartSubtotalText.innerText = `Subtotal: $${subtotal.toFixed(2)}`;
     renderCartList();
-    renderCartPage();
+    renderCartModal();
 
 }
 
-// ✅ Render cart on dedicated cart section
-function renderCartPage() {
-    const cartPageItems = document.getElementById("cartPageItems");
-    const cartPageItemCount = document.getElementById("cartPageItemCount");
-    const cartPageSubtotal = document.getElementById("cartPageSubtotal");
-    const emptyCartMessage = document.getElementById("emptyCartMessage");
-    const cartPageContainer = document.getElementById("cartPageContainer");
+// ✅ Render cart inside the modal
+function renderCartModal() {
+    const modalCartList = document.getElementById("modalCartList");
+    const modalItemsCount = document.getElementById("modalItemsCount");
+    const modalSubtotalText = document.getElementById("modalSubtotalText");
+    const emptyCartModal = document.getElementById("emptyCartModal");
+    const modalCartContainer = document.getElementById("modalCartContainer");
 
-    if (!cartPageItems) return;
+    if (!modalCartList) return;
 
     // Show/hide empty state
     if (cart.length === 0) {
-        cartPageContainer.classList.add("hidden");
-        emptyCartMessage.classList.remove("hidden");
+        modalCartContainer.classList.add("hidden");
+        emptyCartModal.classList.remove("hidden");
         return;
     }
 
-    cartPageContainer.classList.remove("hidden");
-    emptyCartMessage.classList.add("hidden");
+    modalCartContainer.classList.remove("hidden");
+    emptyCartModal.classList.add("hidden");
 
-    // Render items
-    cartPageItems.innerHTML = cart.map((item, index) => `
+    // Render cart items with remove button
+    modalCartList.innerHTML = cart.map((item, index) => `
         <div class="flex items-center gap-4 p-4 bg-gray-50 rounded-lg border border-gray-200 hover:shadow-md transition">
             <img src="${item.image}" class="w-20 h-20 object-contain bg-white rounded p-2" />
             
@@ -207,24 +207,24 @@ function renderCartPage() {
                 <p class="text-lg font-bold text-blue-700 mt-1">$${item.price.toFixed(2)}</p>
             </div>
 
-            <button class="btn btn-sm btn-error bg-red-500 text-white border-0" data-remove-cart-index="${index}">
+            <button class="btn btn-sm btn-error bg-red-500 text-white border-0" data-modal-remove-id="${index}">
                 <i class="fa-solid fa-trash"></i>
             </button>
         </div>
     `).join("");
 
-    // Update summary
-    cartPageItemCount.innerText = cart.length;
+    // Update order summary
+    modalItemsCount.innerText = cart.length;
     const subtotal = cart.reduce((sum, item) => sum + item.price, 0);
-    cartPageSubtotal.innerText = `$${subtotal.toFixed(2)}`;
+    modalSubtotalText.innerText = `$${subtotal.toFixed(2)}`;
 }
 
-// ✅ Event listener for cart page remove buttons
+// ✅ Event delegation: Remove items from modal
 document.addEventListener("click", (e) => {
-    const removeBtn = e.target.closest("button[data-remove-cart-index]");
+    const removeBtn = e.target.closest("button[data-modal-remove-id]");
     if (!removeBtn) return;
 
-    const index = Number(removeBtn.dataset.removeCartIndex);
+    const index = Number(removeBtn.dataset.modalRemoveId);
     if (index >= 0 && index < cart.length) {
         cart.splice(index, 1);
         saveCart();
@@ -232,39 +232,31 @@ document.addEventListener("click", (e) => {
     }
 });
 
-// ✅ Event listener for View Cart button
+// ✅ Event delegation: Clear cart button in modal
+document.addEventListener("click", (e) => {
+    if (e.target.closest("#modalClearCartBtn")) {
+        if (confirm("Are you sure you want to clear your cart?")) {
+            cart = [];
+            saveCart();
+            updateCartUI();
+        }
+    }
+});
+
+// ✅ Event listener for View Cart button - Open Modal
 document.addEventListener("click", (e) => {
     if (e.target.closest("#viewCartBtn")) {
         // Close the dropdown by blurring the trigger
         const cartDropdownTrigger = document.querySelector(".dropdown-end .btn-circle");
         if (cartDropdownTrigger) cartDropdownTrigger.blur();
 
-        // Scroll to cart section
-        const cartSection = document.getElementById("cart");
-        if (cartSection) {
-            const header = document.querySelector("header");
-            const navHeight = header ? header.offsetHeight : 0;
-            const top = cartSection.getBoundingClientRect().top + window.scrollY - navHeight - 12;
-
-            window.scrollTo({
-                top,
-                behavior: "smooth",
-            });
+        // Open the modal
+        const cartModal = document.getElementById("cartModal");
+        if (cartModal) {
+            cartModal.showModal();
         }
     }
 });
-
-// ✅ Clear cart button
-const clearCartBtn = document.getElementById("clearCartBtn");
-if (clearCartBtn) {
-    clearCartBtn.addEventListener("click", () => {
-        if (confirm("Are you sure you want to clear your cart?")) {
-            cart = [];
-            saveCart();
-            updateCartUI();
-        }
-    });
-}
 window.addToCart = function(id) {
     const product = allProducts.find(p => p.id === id);
     if (!product) return;

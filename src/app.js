@@ -257,6 +257,214 @@ document.addEventListener("click", (e) => {
         }
     }
 });
+
+// ===== CHECKOUT FLOW =====
+
+const DELIVERY_FEE = 5.00;
+const ORDERS_KEY = "swiftcart_orders";
+
+// Checkout modal elements
+const checkoutBtn = document.getElementById("checkoutBtn");
+const checkoutModal = document.getElementById("checkoutModal");
+const confirmOrderBtn = document.getElementById("confirmOrderBtn");
+const cancelOrderBtn = document.getElementById("cancelOrderBtn");
+const checkoutForm = document.getElementById("checkoutForm");
+const checkoutMessage = document.getElementById("checkoutMessage");
+const checkoutName = document.getElementById("checkoutName");
+const checkoutPhone = document.getElementById("checkoutPhone");
+const checkoutAddress = document.getElementById("checkoutAddress");
+const checkoutItemsText = document.getElementById("checkoutItemsText");
+const checkoutSubtotalText = document.getElementById("checkoutSubtotalText");
+const checkoutDeliveryText = document.getElementById("checkoutDeliveryText");
+const checkoutTotalText = document.getElementById("checkoutTotalText");
+
+// ✅ Event listener for Proceed to Checkout button
+if (checkoutBtn) {
+    checkoutBtn.addEventListener("click", openCheckout);
+}
+
+// ✅ Event listener for Confirm Order button
+if (confirmOrderBtn) {
+    confirmOrderBtn.addEventListener("click", handleConfirmOrder);
+}
+
+// ✅ Open Checkout Modal
+function openCheckout() {
+    // Validate cart is not empty
+    if (cart.length === 0) {
+        showCheckoutMessage("Cart is empty. Add items before checkout.", "error");
+        return;
+    }
+
+    // Close cart modal if open
+    const cartModal = document.getElementById("cartModal");
+    if (cartModal && cartModal.open) {
+        cartModal.close();
+    }
+
+    // Render checkout summary
+    renderCheckoutSummary();
+
+    // Reset form
+    if (checkoutForm) {
+        checkoutForm.reset();
+    }
+
+    // Clear previous messages
+    clearCheckoutMessage();
+
+    // Open checkout modal
+    if (checkoutModal) {
+        checkoutModal.showModal();
+    }
+}
+
+// ✅ Render order summary into checkout modal
+function renderCheckoutSummary() {
+    const itemsCount = cart.length;
+    const subtotal = cart.reduce((sum, item) => sum + item.price, 0);
+    const total = subtotal + DELIVERY_FEE;
+
+    if (checkoutItemsText) checkoutItemsText.innerText = itemsCount;
+    if (checkoutSubtotalText) checkoutSubtotalText.innerText = `$${subtotal.toFixed(2)}`;
+    if (checkoutDeliveryText) checkoutDeliveryText.innerText = `$${DELIVERY_FEE.toFixed(2)}`;
+    if (checkoutTotalText) checkoutTotalText.innerText = `$${total.toFixed(2)}`;
+}
+
+// ✅ Validate checkout form
+function validateCheckoutForm() {
+    const name = checkoutName ? .value ? .trim() || "";
+    const phone = checkoutPhone ? .value ? .trim() || "";
+    const address = checkoutAddress ? .value ? .trim() || "";
+    const paymentMethod = document.querySelector("input[name='paymentMethod']:checked") ? .value || "";
+
+    // Validation
+    if (!name) {
+        showCheckoutMessage("Please enter your name.", "error");
+        return false;
+    }
+
+    if (!phone || phone.length < 10) {
+        showCheckoutMessage("Please enter a valid phone number (minimum 10 digits).", "error");
+        return false;
+    }
+
+    if (!address) {
+        showCheckoutMessage("Please enter your address.", "error");
+        return false;
+    }
+
+    if (!paymentMethod) {
+        showCheckoutMessage("Please select a payment method.", "error");
+        return false;
+    }
+
+    return { name, phone, address, paymentMethod };
+}
+
+// ✅ Handle Confirm Order button click
+function handleConfirmOrder() {
+    const validation = validateCheckoutForm();
+    if (!validation) return;
+
+    // Create order object
+    const order = createOrder(validation);
+
+    // Save order to localStorage
+    saveOrder(order);
+
+    // Show success message
+    showCheckoutMessage(`✓ Order placed successfully! Order ID: ${order.id}`, "success");
+
+    // Clear cart after a short delay
+    setTimeout(() => {
+        cart = [];
+        saveCart();
+        updateCartUI();
+
+        // Close checkout modal
+        if (checkoutModal) {
+            checkoutModal.close();
+        }
+
+        // Also close cart modal if open
+        const cartModal = document.getElementById("cartModal");
+        if (cartModal && cartModal.open) {
+            cartModal.close();
+        }
+    }, 1500);
+}
+
+// ✅ Create order object
+function createOrder(formData) {
+    const subtotal = cart.reduce((sum, item) => sum + item.price, 0);
+    const total = subtotal + DELIVERY_FEE;
+
+    return {
+        id: "SC-" + Date.now(),
+        createdAt: new Date().toISOString(),
+        items: cart.map(item => ({
+            id: item.id,
+            title: item.title,
+            price: item.price,
+            category: item.category
+        })),
+        itemsCount: cart.length,
+        subtotal: subtotal,
+        deliveryFee: DELIVERY_FEE,
+        total: total,
+        customer: {
+            name: formData.name,
+            phone: formData.phone,
+            address: formData.address
+        },
+        paymentMethod: formData.paymentMethod,
+        status: "PLACED"
+    };
+}
+
+// ✅ Save order to localStorage
+function saveOrder(order) {
+    let orders = getOrders();
+    orders.unshift(order); // Add to beginning (newest first)
+    localStorage.setItem(ORDERS_KEY, JSON.stringify(orders));
+}
+
+// ✅ Get all orders from localStorage
+function getOrders() {
+    const ordersData = localStorage.getItem(ORDERS_KEY);
+    return ordersData ? JSON.parse(ordersData) : [];
+}
+
+// ✅ Show message in checkout modal
+function showCheckoutMessage(message, type = "info") {
+    if (!checkoutMessage) return;
+
+    const bgColor = type === "error" ? "bg-error text-white" :
+        type === "success" ? "bg-success text-white" :
+        "bg-info text-white";
+
+    checkoutMessage.innerHTML = `
+        <div class="alert ${bgColor} shadow-lg rounded-lg">
+            <div>
+                <span>${message}</span>
+            </div>
+        </div>
+    `;
+
+    checkoutMessage.classList.remove("hidden");
+}
+
+// ✅ Clear message area
+function clearCheckoutMessage() {
+    if (checkoutMessage) {
+        checkoutMessage.innerHTML = "";
+        checkoutMessage.classList.add("hidden");
+    }
+}
+
+// ===== END CHECKOUT FLOW =====
+
 window.addToCart = function(id) {
     const product = allProducts.find(p => p.id === id);
     if (!product) return;

@@ -255,7 +255,7 @@
                             <span id="modalSubtotalText">$0.00</span>
                         </div>
                     </div>
-                    <button class="btn btn-primary btn-block bg-blue-700 hover:bg-blue-800 text-white border-0 mb-2">Proceed to Checkout</button>
+                    <button id="checkoutBtn" class="btn btn-primary btn-block bg-blue-700 hover:bg-blue-800 text-white border-0 mb-2">Proceed to Checkout</button>
                     <button id="modalClearCartBtn" class="btn btn-outline btn-block">Clear Cart</button>
                 </div>
             </div>
@@ -269,6 +269,115 @@
         </div>
 
         <!-- Modal Backdrop (click outside to close) -->
+        <form method="dialog" class="modal-backdrop">
+            <button>close</button>
+        </form>
+    </dialog>
+
+    <!-- Checkout Modal (DaisyUI) -->
+    <dialog id="checkoutModal" class="modal">
+        <div class="modal-box w-11/12 max-w-2xl max-h-[90vh] overflow-y-auto">
+            <!-- Modal Header -->
+            <div class="flex items-center justify-between mb-6 pb-4 border-b">
+                <h2 class="text-2xl font-bold">Checkout</h2>
+                <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2" onclick="document.getElementById('checkoutModal').close()">
+                    ✕
+                </button>
+            </div>
+
+            <!-- Alert/Message Area -->
+            <div id="checkoutMessage" class="mb-4 hidden"></div>
+
+            <!-- Checkout Form -->
+            <form id="checkoutForm" class="space-y-5">
+
+                <!-- Customer Info Section -->
+                <div class="bg-base-100 rounded-lg p-4 border border-gray-200">
+                    <h3 class="text-lg font-bold mb-4">Shipping Information</h3>
+
+                    <div class="form-control mb-4">
+                        <label class="label">
+                            <span class="label-text font-semibold">Full Name *</span>
+                        </label>
+                        <input type="text" id="checkoutName" placeholder="John Doe" class="input input-bordered w-full" required />
+                    </div>
+
+                    <div class="form-control mb-4">
+                        <label class="label">
+                            <span class="label-text font-semibold">Phone Number *</span>
+                        </label>
+                        <input type="tel" id="checkoutPhone" placeholder="+880 1XXX XXXXXX" class="input input-bordered w-full" required />
+                    </div>
+
+                    <div class="form-control mb-4">
+                        <label class="label">
+                            <span class="label-text font-semibold">Address *</span>
+                        </label>
+                        <textarea id="checkoutAddress" placeholder="123 Main St, City, Country" class="textarea textarea-bordered w-full h-20" required></textarea>
+                    </div>
+                </div>
+
+                <!-- Payment Method Section -->
+                <div class="bg-base-100 rounded-lg p-4 border border-gray-200">
+                    <h3 class="text-lg font-bold mb-4">Payment Method *</h3>
+
+                    <div class="space-y-3">
+                        <label class="label cursor-pointer justify-start gap-3">
+                            <input type="radio" name="paymentMethod" value="COD" class="radio radio-primary" checked />
+                            <span class="label-text font-semibold">Cash on Delivery (COD)</span>
+                        </label>
+
+                        <label class="label cursor-pointer justify-start gap-3">
+                            <input type="radio" name="paymentMethod" value="Card" class="radio radio-primary" />
+                            <span class="label-text font-semibold">Credit/Debit Card (Demo)</span>
+                        </label>
+
+                        <label class="label cursor-pointer justify-start gap-3">
+                            <input type="radio" name="paymentMethod" value="bKash" class="radio radio-primary" />
+                            <span class="label-text font-semibold">bKash Mobile Payment (Demo)</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Order Summary Section -->
+                <div class="bg-blue-50 rounded-lg p-4 border border-blue-200">
+                    <h3 class="text-lg font-bold mb-4">Order Summary</h3>
+
+                    <div class="space-y-2 text-sm">
+                        <div class="flex justify-between">
+                            <span class="text-gray-600">Items:</span>
+                            <span id="checkoutItemsText" class="font-semibold">0</span>
+                        </div>
+
+                        <div class="flex justify-between">
+                            <span class="text-gray-600">Subtotal:</span>
+                            <span id="checkoutSubtotalText" class="font-semibold">$0.00</span>
+                        </div>
+
+                        <div class="flex justify-between">
+                            <span class="text-gray-600">Delivery Fee:</span>
+                            <span id="checkoutDeliveryText" class="font-semibold">$5.00</span>
+                        </div>
+
+                        <div class="divider my-2"></div>
+
+                        <div class="flex justify-between text-lg font-bold text-blue-700">
+                            <span>Grand Total:</span>
+                            <span id="checkoutTotalText">$0.00</span>
+                        </div>
+                    </div>
+                </div>
+
+            </form>
+
+            <!-- Action Buttons -->
+            <div class="flex gap-3 mt-6 justify-end">
+                <button id="cancelOrderBtn" class="btn btn-outline" onclick="document.getElementById('checkoutModal').close()">Cancel</button>
+                <button id="confirmOrderBtn" class="btn btn-primary bg-blue-700 hover:bg-blue-800 text-white border-0">Confirm Order</button>
+            </div>
+        </div>
+
+        <!-- Modal Backdrop -->
         <form method="dialog" class="modal-backdrop">
             <button>close</button>
         </form>

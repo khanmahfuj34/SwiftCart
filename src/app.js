@@ -333,10 +333,10 @@ function renderCheckoutSummary() {
 
 // ✅ Validate checkout form
 function validateCheckoutForm() {
-    const name = checkoutName ? .value ? .trim() || "";
-    const phone = checkoutPhone ? .value ? .trim() || "";
-    const address = checkoutAddress ? .value ? .trim() || "";
-    const paymentMethod = document.querySelector("input[name='paymentMethod']:checked") ? .value || "";
+    const name = checkoutName ?.value ?.trim() || "";
+    const phone = checkoutPhone ?.value ?.trim() || "";
+    const address = checkoutAddress ?.value ?.trim() || "";
+    const paymentMethod = document.querySelector("input[name='paymentMethod']:checked") ?.value || "";
 
     // Validation
     if (!name) {

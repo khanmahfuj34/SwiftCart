@@ -87,7 +87,7 @@
 
 
                             <div class="card-actions mt-2">
-                                <button class="btn btn-primary btn-block bg-blue-700 text-white font-semibold border-0">
+                                <button id="viewCartBtn" class="btn btn-primary btn-block bg-blue-700 text-white font-semibold border-0">
                   View Cart
                 </button>
                             </div>
@@ -203,6 +203,45 @@
             <div id="productsGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
 
 
+            </div>
+        </section>
+
+        <!-- CART SECTION -->
+        <section id="cart" class="max-w-6xl mx-auto px-4 py-12">
+            <h2 class="text-3xl font-bold mb-6">Shopping Cart</h2>
+
+            <div id="cartPageContainer" class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <!-- Cart Items (Left Column) -->
+                <div class="lg:col-span-2">
+                    <div id="cartPageItems" class="space-y-4 bg-base-100 rounded-lg p-6 border border-gray-200">
+                        <!-- Items will be rendered here -->
+                    </div>
+                </div>
+
+                <!-- Cart Summary (Right Column) -->
+                <div class="bg-base-100 rounded-lg p-6 border border-gray-200 h-fit sticky top-20">
+                    <h3 class="text-xl font-bold mb-4">Order Summary</h3>
+                    <div class="space-y-3 mb-6">
+                        <div class="flex justify-between">
+                            <span class="text-gray-600">Items:</span>
+                            <span id="cartPageItemCount" class="font-semibold">0</span>
+                        </div>
+                        <div class="divider my-2"></div>
+                        <div class="flex justify-between text-lg font-bold text-blue-700">
+                            <span>Subtotal:</span>
+                            <span id="cartPageSubtotal">$0.00</span>
+                        </div>
+                    </div>
+                    <button class="btn btn-primary btn-block bg-blue-700 hover:bg-blue-800 text-white border-0 mb-2">Proceed to Checkout</button>
+                    <button id="clearCartBtn" class="btn btn-outline btn-block">Clear Cart</button>
+                </div>
+            </div>
+
+            <!-- Empty State -->
+            <div id="emptyCartMessage" class="text-center py-12 hidden">
+                <i class="fa-solid fa-cart-shopping text-6xl text-gray-300 mb-4"></i>
+                <p class="text-xl text-gray-500 mb-4">Your cart is empty</p>
+                <a href="#products" class="btn btn-primary bg-blue-700 border-0">Continue Shopping</a>
             </div>
         </section>
 

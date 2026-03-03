@@ -172,7 +172,98 @@ function updateCartUI() {
     const subtotal = cart.reduce((sum, item) => sum + item.price, 0);
     cartSubtotalText.innerText = `Subtotal: $${subtotal.toFixed(2)}`;
     renderCartList();
+    renderCartPage();
 
+}
+
+// ✅ Render cart on dedicated cart section
+function renderCartPage() {
+    const cartPageItems = document.getElementById("cartPageItems");
+    const cartPageItemCount = document.getElementById("cartPageItemCount");
+    const cartPageSubtotal = document.getElementById("cartPageSubtotal");
+    const emptyCartMessage = document.getElementById("emptyCartMessage");
+    const cartPageContainer = document.getElementById("cartPageContainer");
+
+    if (!cartPageItems) return;
+
+    // Show/hide empty state
+    if (cart.length === 0) {
+        cartPageContainer.classList.add("hidden");
+        emptyCartMessage.classList.remove("hidden");
+        return;
+    }
+
+    cartPageContainer.classList.remove("hidden");
+    emptyCartMessage.classList.add("hidden");
+
+    // Render items
+    cartPageItems.innerHTML = cart.map((item, index) => `
+        <div class="flex items-center gap-4 p-4 bg-gray-50 rounded-lg border border-gray-200 hover:shadow-md transition">
+            <img src="${item.image}" class="w-20 h-20 object-contain bg-white rounded p-2" />
+            
+            <div class="flex-1">
+                <h3 class="font-semibold text-base">${item.title}</h3>
+                <p class="text-sm text-gray-500">${item.category}</p>
+                <p class="text-lg font-bold text-blue-700 mt-1">$${item.price.toFixed(2)}</p>
+            </div>
+
+            <button class="btn btn-sm btn-error bg-red-500 text-white border-0" data-remove-cart-index="${index}">
+                <i class="fa-solid fa-trash"></i>
+            </button>
+        </div>
+    `).join("");
+
+    // Update summary
+    cartPageItemCount.innerText = cart.length;
+    const subtotal = cart.reduce((sum, item) => sum + item.price, 0);
+    cartPageSubtotal.innerText = `$${subtotal.toFixed(2)}`;
+}
+
+// ✅ Event listener for cart page remove buttons
+document.addEventListener("click", (e) => {
+    const removeBtn = e.target.closest("button[data-remove-cart-index]");
+    if (!removeBtn) return;
+
+    const index = Number(removeBtn.dataset.removeCartIndex);
+    if (index >= 0 && index < cart.length) {
+        cart.splice(index, 1);
+        saveCart();
+        updateCartUI();
+    }
+});
+
+// ✅ Event listener for View Cart button
+document.addEventListener("click", (e) => {
+    if (e.target.closest("#viewCartBtn")) {
+        // Close the dropdown by blurring the trigger
+        const cartDropdownTrigger = document.querySelector(".dropdown-end .btn-circle");
+        if (cartDropdownTrigger) cartDropdownTrigger.blur();
+
+        // Scroll to cart section
+        const cartSection = document.getElementById("cart");
+        if (cartSection) {
+            const header = document.querySelector("header");
+            const navHeight = header ? header.offsetHeight : 0;
+            const top = cartSection.getBoundingClientRect().top + window.scrollY - navHeight - 12;
+
+            window.scrollTo({
+                top,
+                behavior: "smooth",
+            });
+        }
+    }
+});
+
+// ✅ Clear cart button
+const clearCartBtn = document.getElementById("clearCartBtn");
+if (clearCartBtn) {
+    clearCartBtn.addEventListener("click", () => {
+        if (confirm("Are you sure you want to clear your cart?")) {
+            cart = [];
+            saveCart();
+            updateCartUI();
+        }
+    });
 }
 window.addToCart = function(id) {
     const product = allProducts.find(p => p.id === id);

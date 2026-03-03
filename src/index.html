@@ -17,7 +17,7 @@
 <body class="bg-white w-full overflow-x-hidden text-gray-900">
 
     <!-- HEADER -->
-    <header class="sticky top-0 z-50 border-b border-gray-100 bg-white/90 backdrop-blur">
+    <header class="sticky top-0 z-50 border-b border-gray-100 bg-white bg-opacity-90 backdrop-blur">
         <div class="navbar bg-transparent px-3 lg:px-8 max-w-6xl mx-auto">
 
             <!-- LEFT: Mobile Menu + Logo -->
@@ -52,44 +52,62 @@
             <!-- CENTER: Desktop Menu (HIDDEN ON MOBILE) -->
             <div class="navbar-center hidden lg:flex">
                 <ul id="navLinks" class="menu menu-horizontal px-1 font-medium">
-                    <li><a>Home</a></li>
+                    <li><a href="#">Home</a></li>
 
-                    <li><a>About</a></li>
-                    <li><a>Products</a></li>
-                    <li><a>Contact</a></li>
+                    <li><a href="#about">About</a></li>
+                    <li><a href="#products">Products</a></li>
+                    <li><a href="#contact">Contact</a></li>
                 </ul>
             </div>
 
-            <!-- RIGHT: Cart Icon -->
-            <div class="navbar-end">
+            <!-- RIGHT: Icons & User Menu -->
+            <div class="navbar-end gap-2">
+                <!-- Wishlist Icon -->
+                <button id="wishlistBtn" class="btn btn-ghost btn-circle" title="My Wishlist">
+                    <div class="indicator">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 sm:h-6 sm:w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                        </svg>
+                        <span id="wishlistCount" class="badge badge-sm badge-secondary indicator-item">0</span>
+                    </div>
+                </button>
+
+                <!-- User Menu / Login -->
+                <div class="dropdown dropdown-end">
+                    <button id="userMenuBtn" class="btn btn-ghost btn-circle">
+                        <i class="fa-solid fa-user text-lg"></i>
+                    </button>
+                    <ul id="userDropdownMenu" class="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52">
+                        <li><a id="ordersLink" href="#"><i class="fa-solid fa-receipt"></i> My Orders</a></li>
+                        <li><a id="logoutLink" href="#" class="hidden"><i class="fa-solid fa-sign-out-alt"></i> Logout</a></li>
+                        <li><a id="loginLink" href="#"><i class="fa-solid fa-sign-in-alt"></i> Login</a></li>
+                    </ul>
+                </div>
+
+                <!-- Cart Icon -->
                 <div class="dropdown dropdown-end">
                     <div tabindex="0" role="button" class="btn btn-ghost btn-circle">
                         <div class="indicator">
-                            <!-- Cart Icon -->
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 sm:h-6 sm:w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                  d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5" />
-              </svg>
-
-                            <!-- Badge -->
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5" />
+                            </svg>
                             <span id="cartCount" class="badge badge-sm badge-primary indicator-item">0</span>
-
                         </div>
                     </div>
 
                     <!-- Cart Dropdown -->
-                    <div tabindex="0" class="dropdown-content card card-compact w-64 sm:w-72 bg-base-100 shadow-xl mt-3">
+                    <div tabindex="0" class="dropdown-content card card-compact w-64 sm:w-72 bg-base-100 shadow-xl mt-3 z-50">
                         <div class="card-body">
                             <span id="cartItemsText" class="text-lg font-bold">0 Items</span>
-                            <span id="cartSubtotalText" class="text-info text-sm">Subtotal: $0</span>
+                            <div class="flex items-center justify-between text-info text-sm">
+                                <span id="cartSubtotalText">Subtotal: $0</span>
+                                <span id="cartDeliveryText" class="text-xs">Delivery: $0</span>
+                            </div>
                             <div id="cartList" class="mt-3 space-y-2 max-h-56 overflow-auto"></div>
-
-
-
                             <div class="card-actions mt-2">
-                                <button id="viewCartBtn" class="btn btn-primary btn-block bg-blue-700 text-white font-semibold border-0">
-                  View Cart
-                </button>
+                                <button id="viewCartBtn" class="btn btn-primary btn-block bg-blue-700 hover:bg-blue-800 text-white font-semibold border-0">
+                                    View Cart
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -195,21 +213,86 @@
 
         <!-- Products -->
         <section>
+            <!-- Search & Sort Controls -->
+            <div class="mb-6 flex flex-col sm:flex-row gap-4 items-stretch sm:items-center">
+                <div class="flex-1">
+                    <input id="searchInput" type="text" placeholder="Search products by title or category..." class="input input-bordered w-full" />
+                </div>
+                <select id="sortDropdown" class="select select-bordered w-full sm:w-40">
+                    <option value="default">Sort By</option>
+                    <option value="price-low">Price: Low to High</option>
+                    <option value="price-high">Price: High to Low</option>
+                    <option value="rating">Rating: High to Low</option>
+                </select>
+            </div>
+
+            <!-- Products Title & Count -->
             <div class="flex items-center justify-between mb-4">
                 <h2 class="text-xl font-semibold" id="productsTitle">All Products</h2>
                 <p class="text-sm text-gray-500" id="countText"></p>
             </div>
 
+            <!-- Products Grid / Empty State -->
             <div id="productsGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            </div>
 
+            <!-- Loading Skeleton Cards -->
+            <div id="skeletonLoader" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div class="card bg-base-100 shadow-md border border-gray-200 rounded-2xl h-full animate-pulse">
+                    <div class="bg-gray-300 h-40 rounded-t-2xl"></div>
+                    <div class="card-body p-5 space-y-3">
+                        <div class="h-4 bg-gray-300 rounded w-24"></div>
+                        <div class="h-5 bg-gray-300 rounded w-full"></div>
+                        <div class="h-5 bg-gray-300 rounded w-32"></div>
+                        <div class="flex gap-3 mt-4">
+                            <div class="h-9 bg-gray-300 rounded flex-1"></div>
+                            <div class="h-9 bg-gray-300 rounded flex-1"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card bg-base-100 shadow-md border border-gray-200 rounded-2xl h-full animate-pulse">
+                    <div class="bg-gray-300 h-40 rounded-t-2xl"></div>
+                    <div class="card-body p-5 space-y-3">
+                        <div class="h-4 bg-gray-300 rounded w-24"></div>
+                        <div class="h-5 bg-gray-300 rounded w-full"></div>
+                        <div class="h-5 bg-gray-300 rounded w-32"></div>
+                        <div class="flex gap-3 mt-4">
+                            <div class="h-9 bg-gray-300 rounded flex-1"></div>
+                            <div class="h-9 bg-gray-300 rounded flex-1"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card bg-base-100 shadow-md border border-gray-200 rounded-2xl h-full animate-pulse">
+                    <div class="bg-gray-300 h-40 rounded-t-2xl"></div>
+                    <div class="card-body p-5 space-y-3">
+                        <div class="h-4 bg-gray-300 rounded w-24"></div>
+                        <div class="h-5 bg-gray-300 rounded w-full"></div>
+                        <div class="h-5 bg-gray-300 rounded w-32"></div>
+                        <div class="flex gap-3 mt-4">
+                            <div class="h-9 bg-gray-300 rounded flex-1"></div>
+                            <div class="h-9 bg-gray-300 rounded flex-1"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
+            <!-- No Products Found State -->
+            <div id="noProductsState" class="text-center py-12 hidden">
+                <i class="fa-solid fa-search text-6xl text-gray-300 mb-4"></i>
+                <p class="text-xl text-gray-500 mb-4">No products found</p>
+                <button class="btn btn-primary bg-blue-700 border-0" onclick="document.getElementById('searchInput').value=''; window.filterBySearch('');">
+                    Clear Search
+                </button>
             </div>
         </section>
 
     </main>
 
+    <!-- Toast Notifications Container -->
+    <div id="toastContainer" class="fixed bottom-4 right-4 space-y-3 z-[1000] pointer-events-none"></div>
+
     <!-- Product Details Modal -->
-    <div id="modalBackdrop" class="fixed inset-0 bg-black/50 hidden items-center justify-center p-4">
+    <div id="modalBackdrop" class="fixed inset-0 bg-black/50 hidden items-center justify-center p-4 z-40">
         <div class="bg-white max-w-2xl w-full rounded-2xl shadow-lg overflow-hidden">
             <div class="flex items-center justify-between px-5 py-4 border-b">
                 <h3 class="font-semibold text-lg">Product Details</h3>
@@ -219,6 +302,88 @@
             <div id="modalBody" class="p-5"></div>
         </div>
     </div>
+
+    <!-- Wishlist Modal -->
+    <dialog id="wishlistModal" class="modal">
+        <div class="modal-box w-11/12 max-w-4xl max-h-[90vh] overflow-y-auto">
+            <div class="flex items-center justify-between mb-6 pb-4 border-b">
+                <h2 class="text-2xl font-bold">My Wishlist</h2>
+                <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2" onclick="document.getElementById('wishlistModal').close()">✕</button>
+            </div>
+
+            <div id="wishlistModalContent" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Wishlist items will be rendered here -->
+            </div>
+
+            <!-- Empty Wishlist State -->
+            <div id="emptyWishlistState" class="text-center py-12 hidden">
+                <i class="fa-solid fa-heart text-6xl text-gray-300 mb-4"></i>
+                <p class="text-xl text-gray-500 mb-4">Your wishlist is empty</p>
+                <button class="btn btn-primary bg-blue-700 border-0" onclick="document.getElementById('wishlistModal').close()">Continue Shopping</button>
+            </div>
+        </div>
+        <form method="dialog" class="modal-backdrop">
+            <button>close</button>
+        </form>
+    </dialog>
+
+    <!-- Login Modal -->
+    <dialog id="loginModal" class="modal">
+        <div class="modal-box w-11/12 max-w-md">
+            <div class="flex items-center justify-between mb-4 pb-4 border-b">
+                <h2 class="text-2xl font-bold">Sign In</h2>
+                <button class="btn btn-sm btn-circle btn-ghost" onclick="document.getElementById('loginModal').close()">✕</button>
+            </div>
+
+            <form id="loginForm" class="space-y-4">
+                <div class="form-control">
+                    <label class="label">
+                        <span class="label-text font-semibold">Full Name *</span>
+                    </label>
+                    <input type="text" id="loginName" placeholder="Your Name" class="input input-bordered w-full" required />
+                </div>
+
+                <div class="form-control">
+                    <label class="label">
+                        <span class="label-text font-semibold">Email Address *</span>
+                    </label>
+                    <input type="email" id="loginEmail" placeholder="your@email.com" class="input input-bordered w-full" required />
+                </div>
+
+                <div class="form-actions mt-6 flex gap-3">
+                    <button type="button" class="btn btn-outline flex-1" onclick="document.getElementById('loginModal').close()">Cancel</button>
+                    <button type="submit" class="btn btn-primary bg-blue-700 text-white border-0 flex-1">Sign In</button>
+                </div>
+            </form>
+        </div>
+        <form method="dialog" class="modal-backdrop">
+            <button>close</button>
+        </form>
+    </dialog>
+
+    <!-- My Orders Modal -->
+    <dialog id="ordersModal" class="modal">
+        <div class="modal-box w-11/12 max-w-4xl max-h-[90vh] overflow-y-auto">
+            <div class="flex items-center justify-between mb-6 pb-4 border-b">
+                <h2 class="text-2xl font-bold">My Orders</h2>
+                <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2" onclick="document.getElementById('ordersModal').close()">✕</button>
+            </div>
+
+            <div id="ordersListContent" class="space-y-4">
+                <!-- Orders will be rendered here -->
+            </div>
+
+            <!-- Empty Orders State -->
+            <div id="emptyOrdersState" class="text-center py-12 hidden">
+                <i class="fa-solid fa-box text-6xl text-gray-300 mb-4"></i>
+                <p class="text-xl text-gray-500 mb-4">You haven't placed any orders yet</p>
+                <button class="btn btn-primary bg-blue-700 border-0" onclick="document.getElementById('ordersModal').close()">Start Shopping</button>
+            </div>
+        </div>
+        <form method="dialog" class="modal-backdrop">
+            <button>close</button>
+        </form>
+    </dialog>
 
     <!-- Shopping Cart Modal (DaisyUI) -->
     <dialog id="cartModal" class="modal">
@@ -242,7 +407,7 @@
                 </div>
 
                 <!-- Order Summary (Right Column) -->
-                <div class="bg-base-100 rounded-lg p-6 border border-gray-200 h-fit">
+                <div class="bg-base-100 rounded-lg p-6 border border-gray-200 h-fit sticky top-0">
                     <h3 class="text-xl font-bold mb-4">Order Summary</h3>
                     <div class="space-y-3 mb-6">
                         <div class="flex justify-between">
@@ -250,9 +415,18 @@
                             <span id="modalItemsCount" class="font-semibold">0</span>
                         </div>
                         <div class="divider my-2"></div>
+                        <div class="flex justify-between">
+                            <span class="text-gray-600">Subtotal:</span>
+                            <span id="modalSubtotalText" class="font-semibold">$0.00</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-gray-600">Delivery Fee:</span>
+                            <span id="modalDeliveryText" class="font-semibold">$0.00</span>
+                        </div>
+                        <div class="divider my-2"></div>
                         <div class="flex justify-between text-lg font-bold text-blue-700">
-                            <span>Subtotal:</span>
-                            <span id="modalSubtotalText">$0.00</span>
+                            <span>Total:</span>
+                            <span id="modalTotalText">$0.00</span>
                         </div>
                     </div>
                     <button id="checkoutBtn" class="btn btn-primary btn-block bg-blue-700 hover:bg-blue-800 text-white border-0 mb-2">Proceed to Checkout</button>
@@ -300,6 +474,13 @@
                             <span class="label-text font-semibold">Full Name *</span>
                         </label>
                         <input type="text" id="checkoutName" placeholder="John Doe" class="input input-bordered w-full" required />
+                    </div>
+
+                    <div class="form-control mb-4">
+                        <label class="label">
+                            <span class="label-text font-semibold">Email Address *</span>
+                        </label>
+                        <input type="email" id="checkoutEmail" placeholder="john@example.com" class="input input-bordered w-full" required />
                     </div>
 
                     <div class="form-control mb-4">
